@@ -1,0 +1,46 @@
+{
+    "mcpServers": {
+        "power-platform": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@microsoft/powerplatform-mcp-server"
+            ],
+            "env": {
+                "POWERPLATFORM_TENANT_ID": "${MARRIOTT_TENANT_ID}",
+                "POWERPLATFORM_ENVIRONMENT_URL": "${SAB_DATAVERSE_ENV_URL}",
+                "POWERPLATFORM_CLIENT_ID": "${SAB_SERVICE_PRINCIPAL_CLIENT_ID}",
+                "POWERPLATFORM_CLIENT_SECRET": "${SAB_SERVICE_PRINCIPAL_CLIENT_SECRET}",
+                "POWERPLATFORM_AUTH_MODE": "service_principal"
+            },
+            "description": "Power Platform MCP server for StratAgent Brief. Provides access to Dataverse, Power Automate flows, and Copilot Studio agents in the RMAS environment."
+        }
+    },
+    "_comments": {
+        "setup_notes": [
+            "1. Verify Microsoft's Power Platform MCP server package name before use — the exact npm/dotnet package name may have changed since this template was created. Check https://learn.microsoft.com for current distribution.",
+            "2. Do NOT commit actual secrets to this file. Use environment variables (shown with ${VAR} syntax) or a .env file that is gitignored.",
+            "3. Create a dedicated AAD service principal for SAB development — do NOT reuse a user account, as MFA prompts will break headless Claude Code sessions.",
+            "4. Grant the service principal the minimum necessary permissions: read/write to the SAB solution, read on Marriott entities solution, read on the StratAgent solution (to inspect existing flows for reuse).",
+            "5. The first IT blocker to resolve is whitelisting api.anthropic.com through the SSL inspection proxy. Without that, Claude Code can't authenticate regardless of MCP config.",
+            "6. Test with 'claude mcp list' after config. Then probe with a prompt like 'list the solutions in my environment' to verify the MCP server can actually read from Dataverse."
+        ],
+        "env_var_sources": {
+            "MARRIOTT_TENANT_ID": "Azure AD tenant GUID — ask IT or pull from Entra ID admin center",
+            "SAB_DATAVERSE_ENV_URL": "e.g. https://orgXXXXXX.crm.dynamics.com — from Power Platform admin center",
+            "SAB_SERVICE_PRINCIPAL_CLIENT_ID": "Application (client) ID of the SAB service principal in Entra ID",
+            "SAB_SERVICE_PRINCIPAL_CLIENT_SECRET": "Client secret value — store in a secure location, not in repo"
+        },
+        "optional_additional_servers": {
+            "description": "If desired, add other MCP servers here. Examples commented out below — uncomment and configure as needed.",
+            "microsoft_learn": {
+                "command": "npx",
+                "args": [
+                    "-y",
+                    "@microsoft/learn-mcp-server"
+                ],
+                "purpose": "Search official Microsoft/Azure documentation from within Claude Code sessions. Useful when writing flows or debugging Copilot Studio topics."
+            }
+        }
+    }
+}
