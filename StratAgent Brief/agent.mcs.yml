@@ -1,0 +1,11 @@
+mcs.metadata:
+  componentName: StratAgent Brief
+kind: GptComponentMetadata
+displayName: StratAgent Brief
+instructions:
+gptCapabilities:
+  webBrowsing: true
+
+aISettings:
+  model:
+    modelNameHint: GPT41
